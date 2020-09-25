@@ -1,0 +1,1 @@
+module "github.com/velann21/warehouse-inventory-management"
