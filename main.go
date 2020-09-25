@@ -18,22 +18,23 @@ func main() {
 	helpers.SetEnv()
 	sqlconn := db.SQLConnection{}
 
-	err := sqlconn.OpenSqlConnection()
+	sqlConn, err := sqlconn.OpenSqlConnection()
 	if err != nil {
 		logrus.WithField("EventType", "DbConnection").WithError(err).Error("Db Connection Error")
 		os.Exit(100)
 	}
-
-	err = db.GetSqlConnection().PingContext(context.Background())
+	err = sqlConn.PingContext(context.Background())
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(100)
 	}
 
 	r := mux.NewRouter().StrictSlash(false)
-	rmRoutes := routes.InventoryRoutes{}
-	rmRoutes.InventoryRoutes(r)
+	mainRoutes := r.PathPrefix("/api").Subrouter()
+	invenotryRoutes := routes.NewRoutes(sqlConn)
+	invenotryRoutes.InventoryRoutes(mainRoutes)
 
+    logrus.Info("Starting the server with port :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		logrus.WithField("EventType", "Server Bootup").WithError(err).Error("Server Bootup Error")
 		log.Fatal(err)
