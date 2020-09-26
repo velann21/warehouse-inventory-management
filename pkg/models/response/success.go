@@ -2,62 +2,32 @@ package response
 
 import (
 	"encoding/json"
+	inventoryArticle "github.com/velann21/warehouse-inventory-management/pkg/models/internals"
 	"net/http"
 )
 
 type SuccessResponse struct {
 	Success bool
-	Status string
-	Data []map[string]interface{}
+	Status  string
+	Data    []map[string]interface{}
 }
 
-func (entity *SuccessResponse) UserRegistrationResp(id *string) {
-	responseData := make([]map[string]interface{}, 0)
-	data := make(map[string]interface{})
-	data["id"] = *id
-	responseData = append(responseData, data)
-	entity.Data = responseData
-	entity.Success = true
-	metaData := make(map[string]interface{})
-	metaData["message"] = "User registered"
+func NewSuccessResponse()*SuccessResponse{
+	return &SuccessResponse{}
 }
 
-func (entity *SuccessResponse) CreatePermissionResp(id *string){
+func (resp *SuccessResponse) AddArticlesResponse(successArticle []inventoryArticle.SuccessfullyAddedArticle, failedArticle []inventoryArticle.FailedArticle) {
 	responseData := make([]map[string]interface{}, 0)
 	data := make(map[string]interface{})
-	data["id"] = *id
-	responseData = append(responseData, data)
-	entity.Data = responseData
-	entity.Success = true
-	metaData := make(map[string]interface{})
-	metaData["message"] = "Permission Created"
-}
-
-func (entity *SuccessResponse) CreateRolesResp(id *string){
-	responseData := make([]map[string]interface{}, 0)
-	data := make(map[string]interface{})
-	data["id"] = *id
-	responseData = append(responseData, data)
-	entity.Data = responseData
-	entity.Success = true
-	metaData := make(map[string]interface{})
-	metaData["message"] = "Roles Created"
-}
-
-func (resp *SuccessResponse) CreateClusterResponse(id string, boo bool){
-	responseData := make([]map[string]interface{}, 0)
-	data := make(map[string]interface{})
-	data["id"] = id
-	data["Accepted"] = boo
+	data["addedArticles"] = successArticle
+	data["failedArticles"] = failedArticle
 	responseData = append(responseData, data)
 	resp.Data = responseData
 	resp.Success = true
 	metaData := make(map[string]interface{})
-	metaData["message"] = "Cluster queued to create in background, Please wait for 20+ min..."
+	metaData["message"] = "Add article job is completed"
 }
-
-
-func (resp *SuccessResponse) SuccessResponse(rw http.ResponseWriter, statusCode int){
+func (resp *SuccessResponse) SuccessResponse(rw http.ResponseWriter, statusCode int) {
 	rw.Header().Set("Content-Type", "application/json")
 
 	switch statusCode {
@@ -78,7 +48,3 @@ func (resp *SuccessResponse) SuccessResponse(rw http.ResponseWriter, statusCode 
 	_ = json.NewEncoder(rw).Encode(resp)
 	return
 }
-
-
-
-
