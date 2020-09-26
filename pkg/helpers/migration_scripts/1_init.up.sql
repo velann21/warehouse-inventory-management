@@ -1,0 +1,1 @@
+create table inventory(art_id int AUTO_INCREMENT NOT NULL, name varchar(255) NOT NULL, available_stock BIGINT NOT NULL, sold_stock BIGINT NOT NULL , PRIMARY KEY (art_id));
