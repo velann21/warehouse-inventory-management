@@ -2,11 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	db "github.com/velann21/warehouse-inventory-management/pkg/databases"
 	"github.com/velann21/warehouse-inventory-management/pkg/helpers"
+	db "github.com/velann21/warehouse-inventory-management/pkg/helpers/databases"
 	"github.com/velann21/warehouse-inventory-management/pkg/routes"
 	"log"
 	"net/http"
@@ -14,27 +13,26 @@ import (
 )
 
 func main() {
+	helper := helpers.NewHelper(helpers.HELPER_VERSION_V1)
+	helper.SetEnv()
 
-	helpers.SetEnv()
-	sqlconn := db.SQLConnection{}
-
-	sqlConn, err := sqlconn.OpenSqlConnection()
+	sqlconn := db.NewSqlConnection()
+	sqlConn, err := sqlconn.OpenSqlConnection(helper)
 	if err != nil {
 		logrus.WithField("EventType", "DbConnection").WithError(err).Error("Db Connection Error")
 		os.Exit(100)
 	}
 	err = sqlConn.PingContext(context.Background())
 	if err != nil {
-		fmt.Println(err)
+		logrus.WithField("EventType", "PingContext").WithError(err).Error("Mysql PingContext Error")
 		os.Exit(100)
 	}
-
 	r := mux.NewRouter().StrictSlash(false)
 	mainRoutes := r.PathPrefix("/api").Subrouter()
-	invenotryRoutes := routes.NewRoutes(sqlConn)
+	invenotryRoutes := routes.NewRoutes(sqlConn, helper)
 	invenotryRoutes.InventoryRoutes(mainRoutes)
 
-    logrus.Info("Starting the server with port :8080")
+	logrus.Info("Starting the server with port :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		logrus.WithField("EventType", "Server Bootup").WithError(err).Error("Server Bootup Error")
 		log.Fatal(err)

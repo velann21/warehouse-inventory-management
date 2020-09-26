@@ -1,45 +1,50 @@
 package helpers
 
 import (
-	"bytes"
-	"net/http"
+	"bufio"
+	"encoding/json"
+	"mime/multipart"
 	"os"
-	"time"
 )
 
 const (
 	MYSQLCONNECTIONSTRING = "MysqlConnectionStr"
-	AUTHSERVICECONNECTION = "AuthServiceConnectionStr"
+	DATABASENAME          = "inventory"
+	HELPER_VERSION_V1     = "v1"
 )
 
-func HttpRequest(methodType string, Url string, body []byte) (*http.Response, error) {
-	req, err := http.NewRequest(methodType, Url, bytes.NewReader(body))
-	if err != nil {
-		return nil, err
-	}
-	var client http.Client
-	client.Timeout = 15 * time.Second
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+type HelperBase interface {
+	SetEnv()
+	ReadEnv(envType string) string
+	StreamFile(file multipart.File) (*json.Decoder, error)
 }
 
-func SetEnv() {
-	//os.Setenv("MYSQL_CONN", "root:root@tcp(database:3306)/UsersService?")
-	os.Setenv("MYSQL_CONN", "root:Siar@123@tcp(localhost:3306)/todousersrv?")
-	os.Setenv("AUTHSERVICE_CONN", "http://localhost:8083/api/v1/auth/newtoken")
-
+type Helper struct {
 }
 
-func ReadEnv(envType string) string {
+func NewHelper(version string) HelperBase {
+	switch version {
+	case HELPER_VERSION_V1:
+		return &Helper{}
+	default:
+		return &Helper{}
+	}
+}
+func (helper *Helper) SetEnv() {
+	os.Setenv("MYSQL_CONN", "root:Siar@123@tcp(localhost:3306)/inventory?")
+}
+
+func (helper *Helper) ReadEnv(envType string) string {
 	switch envType {
 	case MYSQLCONNECTIONSTRING:
 		return os.Getenv("MYSQL_CONN")
-	case AUTHSERVICECONNECTION:
-		return os.Getenv("AUTHSERVICE_CONN")
 	default:
 		return ""
 	}
+}
+
+func (helper *Helper) StreamFile(file multipart.File) (*json.Decoder, error) {
+	r := bufio.NewReader(file)
+	d := json.NewDecoder(r)
+	return d, nil
 }
