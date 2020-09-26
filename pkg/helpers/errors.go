@@ -12,4 +12,5 @@ var (
 	SomethingWrong      = errors.New("Something went wrong")
 	UserAlreadyExist    = errors.New("User with email already exists")
 	Roles_notFound      = errors.New("User creation failed")
+	SQLRowNotFound      = "sql: no rows in result set"
 )
