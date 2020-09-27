@@ -8,7 +8,8 @@ import (
 	"net/http"
 )
 
-const INVENTORYFILENAME  =  "inventory.json"
+const INVENTORYFILENAME = "inventory.json"
+
 type AddArticles struct {
 	Articles []Article `json:"articles"`
 }
@@ -19,7 +20,7 @@ type Article struct {
 	Stock string `json:"stock"`
 }
 
-func NewAddArticles()*AddArticles{
+func NewAddArticles() *AddArticles {
 	return &AddArticles{}
 }
 
@@ -39,28 +40,28 @@ func (addArticles *AddArticles) PopulateAddArticles(body io.Reader) error {
 	return nil
 }
 
-func (addArticles *AddArticles) PopulateAddArticlesDataFromFile(req *http.Request, helper helpers.HelperBase) (*json.Decoder,*multipart.FileHeader,  error) {
+func (addArticles *AddArticles) PopulateAddArticlesDataFromFile(req *http.Request, helper helpers.HelperBase) (*json.Decoder, *multipart.FileHeader, error) {
 	err := req.ParseMultipartForm(20 << 20)
 	if err != nil {
-		return nil,nil, err
+		return nil, nil, err
 	}
 	file, handler, err := req.FormFile("file")
 	if err != nil {
-		return nil,nil, err
+		return nil, nil, err
 	}
 	defer file.Close()
 	decode, err := helper.StreamFile(file)
 	if err != nil {
-		return nil,nil, err
+		return nil, nil, err
 	}
-	return decode,handler, nil
+	return decode, handler, nil
 }
 
-func (addArticles *AddArticles) ValidateAddArticlesDataFromFile(req *http.Request, handler *multipart.FileHeader)error{
-	if handler.Size > 20*1024*1024{
+func (addArticles *AddArticles) ValidateAddArticlesDataFromFile(req *http.Request, handler *multipart.FileHeader) error {
+	if handler.Size > 20*1024*1024 {
 		return helpers.InvalidRequest
 	}
-	if handler.Filename != INVENTORYFILENAME{
+	if handler.Filename != INVENTORYFILENAME {
 		return helpers.InvalidRequest
 	}
 	return nil

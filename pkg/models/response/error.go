@@ -12,7 +12,7 @@ type ErrorResponse struct {
 	Errors  []Error
 }
 
-func NewErrorResponse()*ErrorResponse{
+func NewErrorResponse() *ErrorResponse {
 	return &ErrorResponse{}
 }
 

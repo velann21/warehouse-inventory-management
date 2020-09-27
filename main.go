@@ -22,15 +22,21 @@ func main() {
 		logrus.WithField("EventType", "DbConnection").WithError(err).Error("Db Connection Error")
 		os.Exit(100)
 	}
+
 	err = sqlConn.PingContext(context.Background())
 	if err != nil {
 		logrus.WithField("EventType", "PingContext").WithError(err).Error("Mysql PingContext Error")
 		os.Exit(100)
 	}
+
 	r := mux.NewRouter().StrictSlash(false)
 	mainRoutes := r.PathPrefix("/api").Subrouter()
-	invenotryRoutes := routes.NewRoutes(sqlConn, helper)
-	invenotryRoutes.InventoryRoutes(mainRoutes)
+
+	articleRoutes := routes.NewArticlesRoutes(sqlConn, helper)
+	articleRoutes.ArticlesRoutes(mainRoutes)
+
+	productRoutes := routes.NewProductsRoutes(sqlConn, helper)
+	productRoutes.ProductRoutes(mainRoutes)
 
 	logrus.Info("Starting the server with port :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {

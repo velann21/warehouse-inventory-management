@@ -1,1 +1,1 @@
-drop table inventory;
+drop table product_inventory;
