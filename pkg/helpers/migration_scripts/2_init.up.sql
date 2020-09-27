@@ -1,1 +1,1 @@
-create table products(id int AUTO_INCREMENT NOT NULL UNIQUE, name varchar(255) NOT NULL, description varchar(255) NOT NULL, PRIMARY KEY (name));
+create table products(id int AUTO_INCREMENT NOT NULL , name varchar(255) NOT NULL UNIQUE, description varchar(255) NOT NULL,price varchar(255) NOT NULL, available_quantity int NOT NULL, PRIMARY KEY (id));

@@ -1,1 +1,1 @@
-drop table products;
+drop table inventory;
