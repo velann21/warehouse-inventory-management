@@ -1,15 +1,16 @@
-apiVersion: v1
+apiVersion: {{ template "service.apiVersion" .}}
 kind: Service
 metadata:
-  name: {{ include "inventory_srv.fullname" . }}
-  labels:
-    {{- include "inventory_srv.labels" . | nindent 4 }}
+  name: {{ .Release.Name}}
+  namespace: {{ .Values.namespace }}
+  {{- template "inventorydeps.labels" . }}
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+  type: ClusterIP
   selector:
-    {{- include "inventory_srv.selectorLabels" . | nindent 4 }}
+    app: {{ .Release.Name}}
+  ports:
+    {{- range $key, $value := .Values.serviceports }}
+    - protocol: {{ $value.protocol }}
+      port: {{ $value.port }}
+      targetPort: {{ $value.targetPort }}
+    {{- end }}
