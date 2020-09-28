@@ -97,3 +97,33 @@ func (productsControllers *ArticlesControllers) ListArticles(res http.ResponseWr
 	successResponse.SuccessResponse(res, http.StatusOK)
 	return
 }
+
+func (productsControllers *ArticlesControllers) SqlMigration(res http.ResponseWriter, req *http.Request){
+	ctx, cancel := context.WithTimeout(req.Context(), TIMEOUT)
+	defer cancel()
+	successResponse := response.NewSuccessResponse()
+	errorResponse := response.NewErrorResponse()
+
+	sqlMigrationReq := requests.SqlMigrationRequest{}
+	err := sqlMigrationReq.PopulateSqlMigrationRequest(req.Body)
+	if err != nil {
+		logrus.WithError(err).Error("Something went wrong while PopulateSqlMigrationRequest() ")
+		errorResponse.HandleError(err, res)
+		return
+	}
+	err = sqlMigrationReq.ValidateSqlMigrationRequest()
+	if err != nil {
+		logrus.WithError(err).Error("Something went wrong while PopulateSqlMigrationRequest() ")
+		errorResponse.HandleError(err, res)
+		return
+	}
+
+	err = productsControllers.service.SqlMigration(ctx, &sqlMigrationReq)
+	if err != nil{
+		logrus.WithError(err).Error("Something went wrong while SqlMigration() ")
+		errorResponse.HandleError(err, res)
+		return
+	}
+	successResponse.SuccessResponse(res, http.StatusOK)
+	return
+}

@@ -26,4 +26,5 @@ func (inventory *ArticlesRoutes) ArticlesRoutes(route *mux.Router) {
 	route.PathPrefix("/v1/inventory/articles/fromFile").HandlerFunc(inventory.controller.AddArticlesFromFile).Methods("POST")
 	route.PathPrefix("/v1/inventory/articles").HandlerFunc(inventory.controller.AddArticles).Methods("POST")
 	route.PathPrefix("/v1/inventory/articles").HandlerFunc(inventory.controller.ListArticles).Methods("GET")
+	route.PathPrefix("/v1/inventory/sqlmigration").HandlerFunc(inventory.controller.SqlMigration).Methods("POST")
 }

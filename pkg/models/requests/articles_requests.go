@@ -66,3 +66,30 @@ func (addArticles *AddArticles) ValidateAddArticlesDataFromFile(req *http.Reques
 	}
 	return nil
 }
+
+type SqlMigrationRequest struct {
+	Upcount              int64    `json:"upcount,omitempty"`
+	Downcount            int64    `json:"downcount,omitempty"`
+}
+
+func (sqlMigrationRequest *SqlMigrationRequest) PopulateSqlMigrationRequest(body io.Reader) error {
+	decode := json.NewDecoder(body)
+	err := decode.Decode(&sqlMigrationRequest)
+	if err != nil {
+		return helpers.InvalidRequest
+	}
+	return nil
+}
+
+func (sqlMigrationRequest *SqlMigrationRequest) ValidateSqlMigrationRequest() error{
+
+	if sqlMigrationRequest.Upcount < 0 && sqlMigrationRequest.Downcount < 0{
+		return helpers.InvalidRequest
+	}
+
+	if sqlMigrationRequest.Upcount > 0 && sqlMigrationRequest.Downcount > 0{
+		return helpers.InvalidRequest
+	}
+
+	return nil
+}
