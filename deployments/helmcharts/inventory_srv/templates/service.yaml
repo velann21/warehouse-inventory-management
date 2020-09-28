@@ -1,9 +1,9 @@
 apiVersion: {{ template "service.apiVersion" .}}
 kind: Service
 metadata:
-  name: {{ .Release.Name}}
-  namespace: {{ .Values.namespace }}
-  {{- template "inventorydeps.labels" . }}
+   name: {{ .Release.Name}}
+   namespace: {{ .Values.namespace }}
+   {{ template "inventorydeps.labels" }}
 spec:
   type: ClusterIP
   selector:

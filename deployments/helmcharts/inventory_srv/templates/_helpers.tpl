@@ -8,9 +8,9 @@
 
 {{- define "inventorydeps.labels" }}
    labels:
-        app: "{{ $.Release.Name }}"
-        k8s-app-name: famk8s
-        owned_by: platform
+       app: "{{ $.Release.Name }}"
+       k8s-app-name: famk8s
+       owned_by: platform
 {{- end }}
 
 {{- define "deployment.apiVersion" }}apps/v1{{- end }}
