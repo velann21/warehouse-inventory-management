@@ -1,11 +1,12 @@
 run-local-mysql:
-	./scripts.sh
+	docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3308:3306 -d mysql
 
-change-permission-scripts.sh:
-	chmod 700 ./scripts.sh
+run-local-inventory:
+	docker run --network=host -d "singaravelan21/inventory_srv:`cat .version`"
 
 build-docker:
 	docker build . -t inventory_srv;
+
 push-docker: build-docker
 	docker tag "inventory_srv" "singaravelan21/inventory_srv:`cat .version`";
 	docker push "singaravelan21/inventory_srv:`cat .version`";
