@@ -104,6 +104,7 @@ func (articlesService *ArticlesServiceImpl) streamArticlesData(decoder *json.Dec
 	return streamChannel
 }
 
+//Todo Make this complete Mysql thing to one transaction so that we no need to hadle the rollback stuffs
 func (articlesService *ArticlesServiceImpl) addArticleJob(ctx context.Context, articleData *requests.Article) (int64, error) {
 	article, err := articlesService.getArticle(ctx, articleData)
 	if err != nil {

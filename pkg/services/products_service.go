@@ -166,6 +166,7 @@ func (productsService *ProductsServiceImpl) createProductArticleEntry(ctx contex
 	return nil
 }
 
+//Todo Make this complete Mysql thing to one transaction so that we no need to hadle the rollback stuffs
 func (productsService *ProductsServiceImpl) addProductJob(ctx context.Context, product *requests.Products) (int64, error) {
 	//Checking whether the product is already available
 	dbProduct, err := productsService.getProduct(ctx, product.Name)

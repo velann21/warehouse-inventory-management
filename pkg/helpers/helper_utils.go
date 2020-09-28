@@ -31,8 +31,8 @@ func NewHelper(version string) HelperBase {
 	}
 }
 func (helper *Helper) SetEnv() {
-	os.Setenv("MYSQL_CONN", "root:Siar@123@tcp(localhost:3306)/inventory?")
-	//os.Setenv("MYSQL_CONN", "root:root@tcp(localhost:3308)/inventory?")
+	//os.Setenv("MYSQL_CONN", "root:Siar@123@tcp(localhost:3306)/inventory?")
+	os.Setenv("MYSQL_CONN", "root:root@tcp(localhost:3308)/inventory?")
 }
 
 func (helper *Helper) ReadEnv(envType string) string {

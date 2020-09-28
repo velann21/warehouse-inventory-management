@@ -145,5 +145,25 @@ APIs:
        "downcount":0
    }' 
     Description:
-               This API is to make an sql migration (To create tables)           
+               This API is to make an sql migration (To create tables) 
+               
+               
+How to run the project:
+---
+I coudln't add these due to time constrains
+
+This step I will explain during the our virtual interview/ Will show you how to run
+
+Features to improve:
+---
+1. Need to add proper error handling
+2. Need to create proper response structre for AddArticle API and AddProducts API with failed and success 
+3. Need to use proper Transaction for Mysql db write and update
+4. Make the app properly helmized for kubernetes support
+
+Note:
+--
+This code is not production grade code, I have written this whole code in just 6 hours, So i couldn't focus on lots of good practises.
+ I will make this code properly runnable in k8s and docker before our virtual interview
+                         
      
