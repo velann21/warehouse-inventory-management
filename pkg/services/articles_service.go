@@ -22,14 +22,6 @@ type ArticlesService interface {
 	AddArticlesFromFile(ctx context.Context, decoder *json.Decoder, waitChannel chan bool) error
 	ListArticles(ctx context.Context) ([]*database.Article, error)
 	SqlMigration(ctx context.Context, req *requests.SqlMigrationRequest)error
-
-	// Private functions
-	assignTask(ctx context.Context, articleStreams chan *requests.Article, waitChannel chan bool)
-	addArticleJob(ctx context.Context, articleData *requests.Article) (int64, error)
-	streamArticlesData(decoder *json.Decoder) chan *requests.Article
-	createNewArticle(ctx context.Context, value *requests.Article) (int64, error)
-	addArticleAsSuccess(article *requests.Article, suc []articlesModel.SuccessfullyAddedArticle, id int64)
-	addArticleAsFailure(article *requests.Article, errorsArr []articlesModel.FailedArticle, err error)
 }
 
 type ArticlesServiceImpl struct {
@@ -94,7 +86,7 @@ func (articlesService *ArticlesServiceImpl) streamArticlesData(decoder *json.Dec
 			articleObj := requests.Article{}
 			err := decoder.Decode(&articleObj)
 			if err != nil {
-				logrus.WithError(err).Error("Something wrong while decode inside streamArticlesData()")
+				logrus.WithError(err).Error("Something wrong while decode inside StreamArticlesData()")
 				continue
 			}
 			streamChannel <- &articleObj

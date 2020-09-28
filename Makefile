@@ -10,6 +10,3 @@ build-docker:
 push-docker: build-docker
 	docker tag "inventory_srv" "singaravelan21/inventory_srv:`cat .version`";
 	docker push "singaravelan21/inventory_srv:`cat .version`";
-
-
-

@@ -22,16 +22,6 @@ type ProductsService interface {
 	GetAllProducts(ctx context.Context) ([]*database.Product, error)
 	GetProductByID(ctx context.Context, productDetails *requests.GetProductDetails)([]*database.ProductDetails, error)
 	PurchaseProducts(ctx context.Context, products *requests.PurchaseProduct) error
-
-	//These all are just an private function for more modularity
-	getProduct(ctx context.Context, productName string) (*database.Product, error)
-	createNewProduct(ctx context.Context, value *requests.Products) (int64, error)
-	updateProduct(ctx context.Context, existingproduct *database.Product) (int64, error)
-	createProductArticleEntry(ctx context.Context, amount string, productID int, artID int) error
-	addProductJob(ctx context.Context, product *requests.Products) (int64, error)
-	addProductArticlesJob(ctx context.Context, productID int64, product *requests.Products) error
-	updateProductArticles(ctx context.Context, productsArticles *database.ProductsArticles) (int64, error)
-	getProductArticles(ctx context.Context, productID int, artID int) (*database.ProductsArticles, error)
 }
 
 type ProductsServiceImpl struct {
