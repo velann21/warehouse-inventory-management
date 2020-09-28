@@ -38,8 +38,8 @@ func main() {
 	productRoutes := routes.NewProductsRoutes(sqlConn, helper)
 	productRoutes.ProductRoutes(mainRoutes)
 
-	logrus.Info("Starting the server with port :8080")
-	if err := http.ListenAndServe(":8080", r); err != nil {
+	logrus.Info("Starting the server with port :8083")
+	if err := http.ListenAndServe(":8083", r); err != nil {
 		logrus.WithField("EventType", "Server Bootup").WithError(err).Error("Server Bootup Error")
 		log.Fatal(err)
 		return

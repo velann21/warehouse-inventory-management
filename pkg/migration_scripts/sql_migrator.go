@@ -27,7 +27,7 @@ func MigrateDb(stepCount uint) error {
 	if err != nil {
 		return err
 	}
-	err = m.Migrate(stepCount)
+	err = m.Up()
 	if err != nil {
 		return err
 	}
