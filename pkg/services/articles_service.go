@@ -61,6 +61,30 @@ func (articlesService *ArticlesServiceImpl) AddArticlesFromFile(ctx context.Cont
 	return nil
 }
 
+func (articlesService *ArticlesServiceImpl) ListArticles(ctx context.Context) ([]*database.Article, error) {
+	articles, err := articlesService.repo.GetArticles(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return articles, nil
+}
+
+func (articlesService *ArticlesServiceImpl) SqlMigration(ctx context.Context, req *requests.SqlMigrationRequest) error {
+	if req.Upcount > 0 {
+		err := sqlMigration.MigrateDb(uint(req.Upcount))
+		if err != nil {
+			return err
+		}
+	} else if req.Downcount < 0 {
+		err := sqlMigration.MigrateDb(uint(req.Downcount))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// All these are private functions
 func (articlesService *ArticlesServiceImpl) assignTask(ctx context.Context, articleStreams chan *requests.Article, waitChannel chan bool) {
 	go func() {
 		succedArticles := make([]articlesModel.SuccessfullyAddedArticle, 0)
@@ -154,25 +178,4 @@ func (articlesService *ArticlesServiceImpl) addArticleAsFailure(article *request
 	errorsArr = append(errorsArr, error)
 }
 
-func (articlesService *ArticlesServiceImpl) ListArticles(ctx context.Context) ([]*database.Article, error) {
-	articles, err := articlesService.repo.GetArticles(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return articles, nil
-}
 
-func (articlesService *ArticlesServiceImpl) SqlMigration(ctx context.Context, req *requests.SqlMigrationRequest) error {
-	if req.Upcount > 0 {
-		err := sqlMigration.MigrateDb(uint(req.Upcount))
-		if err != nil {
-			return err
-		}
-	} else if req.Downcount < 0 {
-		err := sqlMigration.MigrateDb(uint(req.Downcount))
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}

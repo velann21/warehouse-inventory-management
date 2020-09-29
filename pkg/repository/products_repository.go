@@ -86,6 +86,24 @@ func (productsRepo *ProductsRepositoryImpl) GetProduct(ctx context.Context, quer
 	return &product, nil
 }
 
+func (productsRepo *ProductsRepositoryImpl) GetProducts(ctx context.Context) ([]*database.Product, error) {
+	results, err := productsRepo.client.QueryWithContext(ctx, helpers.GetAllProducts)
+	if err != nil {
+		return nil, err
+	}
+	finalResult := []*database.Product{}
+	for results.Next() {
+		product := database.Product{}
+		err := results.Scan(&product.ID, &product.Name, &product.Description, &product.Price, &product.Quantity)
+		if err != nil {
+			return nil, err
+		}
+		finalResult = append(finalResult, &product)
+	}
+	return finalResult, nil
+
+}
+
 func (productsRepo *ProductsRepositoryImpl) UpdateProduct(ctx context.Context, product *database.Product) (int64, error) {
 	options := productsRepo.client.BuildOptions(false, productsRepo.client.GetIsolationLevel(1))
 	tx, err := productsRepo.client.BeginWithContext(ctx, &options)
@@ -117,24 +135,6 @@ func (productsRepo *ProductsRepositoryImpl) UpdateProduct(ctx context.Context, p
 		return -1, err
 	}
 	return id, nil
-}
-
-func (productsRepo *ProductsRepositoryImpl) GetProducts(ctx context.Context) ([]*database.Product, error) {
-	results, err := productsRepo.client.QueryWithContext(ctx, helpers.GetAllProducts)
-	if err != nil {
-		return nil, err
-	}
-	finalResult := []*database.Product{}
-	for results.Next() {
-		product := database.Product{}
-		err := results.Scan(&product.ID, &product.Name, &product.Description, &product.Price, &product.Quantity)
-		if err != nil {
-			return nil, err
-		}
-		finalResult = append(finalResult, &product)
-	}
-	return finalResult, nil
-
 }
 
 func (productsRepo *ProductsRepositoryImpl) InsertProductsArticles(ctx context.Context, productArticle *database.ProductsArticles) (int64, error) {
@@ -330,30 +330,30 @@ func (productsRepo *ProductsRepositoryImpl) GetProductDetailsByID(ctx context.Co
 	return finalResult, nil
 }
 
-func (repo *ProductsRepositoryImpl) UpdateArticle(ctx context.Context, article *database.Article) (int64, error) {
-	options := repo.client.BuildOptions(false, repo.client.GetIsolationLevel(1))
-	tx, err := repo.client.BeginWithContext(ctx, &options)
+func (productsRepo *ProductsRepositoryImpl) UpdateArticle(ctx context.Context, article *database.Article) (int64, error) {
+	options := productsRepo.client.BuildOptions(false, productsRepo.client.GetIsolationLevel(1))
+	tx, err := productsRepo.client.BeginWithContext(ctx, &options)
 	if err != nil {
 		return -1, err
 	}
-	stmt, err := repo.client.PrepareWithContext(ctx, tx, helpers.UpdateArticleByID)
+	stmt, err := productsRepo.client.PrepareWithContext(ctx, tx, helpers.UpdateArticleByID)
 	if err != nil {
-		_ = repo.client.RollBack(tx)
+		_ = productsRepo.client.RollBack(tx)
 		return -1, err
 	}
-	res, err := repo.client.ExecWithContext(ctx, stmt, article.GetName(), article.GetAvailableStock(), article.GetSoldStock(), article.GetArtID())
+	res, err := productsRepo.client.ExecWithContext(ctx, stmt, article.GetName(), article.GetAvailableStock(), article.GetSoldStock(), article.GetArtID())
 	if err != nil {
-		_ = repo.client.RollBack(tx)
+		_ = productsRepo.client.RollBack(tx)
 		return -1, err
 	}
-	id, err := repo.client.LastInsertedID(res)
+	id, err := productsRepo.client.LastInsertedID(res)
 	if err != nil {
-		_ = repo.client.RollBack(tx)
+		_ = productsRepo.client.RollBack(tx)
 		return -1, err
 	}
-	err = repo.client.Commit(tx)
+	err = productsRepo.client.Commit(tx)
 	if err != nil {
-		err = repo.client.RollBack(tx)
+		err = productsRepo.client.RollBack(tx)
 		if err != nil {
 			return -1, err
 		}

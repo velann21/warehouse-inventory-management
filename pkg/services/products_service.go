@@ -103,7 +103,7 @@ func (productsService *ProductsServiceImpl) GetAllProducts(ctx context.Context) 
 	return productsList, nil
 }
 
-// All there are private functions
+// All these are private functions
 func (productsService *ProductsServiceImpl) streamArticlesData(decoder *json.Decoder) chan *requests.Products {
 	streamChannel := make(chan *requests.Products, 15000)
 	go func() {

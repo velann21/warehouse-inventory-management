@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const TIMEOUT = time.Minute * 50
+const TIMEOUT = time.Second * 10
 
 //1. Todo make the response structure into Hateos style
 //2. Todo change the database table name from inventory to articles
