@@ -129,6 +129,6 @@ func (productsControllers *ArticlesControllers) SqlMigration(res http.ResponseWr
 		return
 	}
 	successResponse.SuccessResponse(res, http.StatusOK)
-	logrus.Info("Starting the SqlMigration().......")
+	logrus.Info("Done the SqlMigration().......")
 	return
 }

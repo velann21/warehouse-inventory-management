@@ -192,15 +192,6 @@ func (productsService *ProductsServiceImpl) addProductJob(ctx context.Context, p
 		// Here I am updating the required Articles count as well
 		for _, article := range product.Articles {
 			artID, _ := strconv.Atoi(article.ArtID)
-			// Checking whether the art id exist
-			dbarticle, err := productsService.repo.GetArticleByID(ctx, helpers.GetArticleByID, artID)
-			if err != nil {
-				if err.Error() == helpers.SQLRowNotFound {
-					// TODO What if the there are one Article not another one in Articles entry what should we do.
-					return -1, err
-				}
-				return -1, err
-			}
 			// Checking whether the getProductArticles entry availabe for product ID and ART ID
 			dbProductArticle, err := productsService.getProductArticles(ctx, dbProduct.ID, artID)
 			if err != nil {
@@ -216,12 +207,13 @@ func (productsService *ProductsServiceImpl) addProductJob(ctx context.Context, p
 				continue
 			}
 
-			dbarticle.AvilableStock -= amount
-			_, err = productsService.repo.UpdateArticle(ctx, dbarticle)
-			if err != nil {
-				//Todo roll back all Product count and Product_inventory entry
-				return -1, err
-			}
+			//TODO Do update the Article Table available stock as we used few articles
+			//dbarticle.AvilableStock -= amount
+			//_, err = productsService.repo.UpdateArticle(ctx, dbarticle)
+			//if err != nil {
+			//	//Todo roll back all Product count and Product_inventory entry
+			//	return -1, err
+			//}
 
 		}
 		return updatedID, nil
@@ -247,11 +239,12 @@ func (productsService *ProductsServiceImpl) addProductArticlesJob(ctx context.Co
 		amountInInt, err := strconv.Atoi(productArticle.AmountOf)
 		article.AvilableStock -= amountInInt
 
-		_, err = productsService.repo.UpdateArticle(ctx, article)
-		if err != nil {
-			//Todo roll back all Product count and Product_inventory entry
-			return err
-		}
+		//TODO Do update the Article Table available stock as we used few articles
+		//_, err = productsService.repo.UpdateArticle(ctx, article)
+		//if err != nil {
+		//	//Todo roll back all Product count and Product_inventory entry
+		//	return err
+		//}
 	}
 	return nil
 }

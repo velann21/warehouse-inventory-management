@@ -12,7 +12,8 @@ const (
 	PRODUCTS_REPO_VERSION1 = "version1"
 )
 
-// Todo to reuse the code of transactions instead of doing it always in each functions
+//1. Todo to reuse the code of transactions instead of doing it always in each functions
+//2. TODO Make use of proper transaction isolation level based on type of transaction
 type ProductsRepository interface {
 	InsertProduct(ctx context.Context, product *database.Product) (int64, error)
 	GetProduct(ctx context.Context, query string, args ...interface{}) (*database.Product, error)
@@ -321,7 +322,7 @@ func (productsRepo *ProductsRepositoryImpl) GetProductDetailsByID(ctx context.Co
 	return finalResult, nil
 }
 
-// Todo Move this to article repo
+// Todo: Move this to article repo
 func (productsRepo *ProductsRepositoryImpl) UpdateArticle(ctx context.Context, article *database.Article) (int64, error) {
 	options := productsRepo.client.BuildOptions(false, productsRepo.client.GetIsolationLevel(1))
 	tx, err := productsRepo.client.BeginWithContext(ctx, &options)
@@ -354,7 +355,7 @@ func (productsRepo *ProductsRepositoryImpl) UpdateArticle(ctx context.Context, a
 	return id, nil
 }
 
-// Todo Move this to article repo
+// Todo: Move this to article repo
 func (productsRepo *ProductsRepositoryImpl) GetArticleByID(ctx context.Context, query string, args ...interface{}) (*database.Article, error) {
 	result := productsRepo.client.QueryRowWithContext(ctx, query, args...)
 	article := database.Article{}

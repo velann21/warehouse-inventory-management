@@ -11,6 +11,7 @@ const (
 	MYSQLCONNECTIONSTRING = "MysqlConnectionStr"
 	DATABASENAME          = "inventory"
 	HELPER_VERSION_V1     = "v1"
+	MigrationFileLocation = "MIGRATIONFILE"
 )
 
 type HelperBase interface {
@@ -31,14 +32,20 @@ func NewHelper(version string) HelperBase {
 	}
 }
 func (helper *Helper) SetEnv() {
-	//os.Setenv("MYSQL_CONN", "root:Siar@123@tcp(localhost:3306)/inventory?")
-	os.Setenv("MYSQL_CONN", "root:root@tcp(localhost:3308)/inventory?")
+	// Containers env set
+	//os.Setenv("MYSQL_CONN", "root:root@tcp(localhost:3308)/inventory?")
+	//os.Setenv("MIGRATIONFILE", "file://")
+
+	os.Setenv("MYSQL_CONN", "root:Siar@123@tcp(localhost:3306)/inventory?")
+	os.Setenv("MIGRATIONFILE", "file://pkg/migration_scripts")
 }
 
 func (helper *Helper) ReadEnv(envType string) string {
 	switch envType {
 	case MYSQLCONNECTIONSTRING:
 		return os.Getenv("MYSQL_CONN")
+	case MigrationFileLocation:
+		return os.Getenv("MIGRATIONFILE")
 	default:
 		return ""
 	}

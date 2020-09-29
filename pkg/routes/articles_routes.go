@@ -23,9 +23,9 @@ func NewArticlesRoutes(sql *sql.DB, helpers helpers.HelperBase) *ArticlesRoutes 
 }
 
 func (inventory *ArticlesRoutes) ArticlesRoutes(route *mux.Router) {
-	route.PathPrefix("/v1/inventory/articles/fromFile").HandlerFunc(inventory.controller.AddArticlesFromFile).Methods("POST")
-	route.PathPrefix("/v1/inventory/articles").HandlerFunc(inventory.controller.AddArticles).Methods("POST")
-	route.PathPrefix("/v1/inventory/articles").HandlerFunc(inventory.controller.ListArticles).Methods("GET")
+	route.Path("/v1/inventory/articles").HandlerFunc(inventory.controller.AddArticles).Methods("POST")
+	route.Path("/v1/inventory/articles/fromFile").HandlerFunc(inventory.controller.AddArticlesFromFile).Methods("POST")
+	route.Path("/v1/inventory/articles").HandlerFunc(inventory.controller.ListArticles).Methods("GET")
 
 	// Todo Move this to common routes folders later
 	route.PathPrefix("/v1/inventory/sqlmigration").HandlerFunc(inventory.controller.SqlMigration).Methods("POST")
