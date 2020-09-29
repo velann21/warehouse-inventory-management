@@ -19,6 +19,7 @@ const (
 	LevelDefault           = 0
 )
 
+// Todo to reuse the code of transactions instead of doing it always
 type ArticlesRepository interface {
 	InsertArticle(ctx context.Context, article *database.Article) (int64, error)
 	GetArticles(ctx context.Context) ([]*database.Article, error)

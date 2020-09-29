@@ -12,6 +12,7 @@ const (
 	PRODUCTS_REPO_VERSION1 = "version1"
 )
 
+// Todo to reuse the code of transactions instead of doing it always in each functions
 type ProductsRepository interface {
 	InsertProduct(ctx context.Context, product *database.Product) (int64, error)
 	GetProduct(ctx context.Context, query string, args ...interface{}) (*database.Product, error)
@@ -170,16 +171,6 @@ func (productsRepo *ProductsRepositoryImpl) InsertProductsArticles(ctx context.C
 	return id, nil
 }
 
-func (productsRepo *ProductsRepositoryImpl) GetArticleByID(ctx context.Context, query string, args ...interface{}) (*database.Article, error) {
-	result := productsRepo.client.QueryRowWithContext(ctx, query, args...)
-	article := database.Article{}
-	err := result.Scan(&article.ArtID, &article.Name, &article.AvilableStock, &article.SoldStock)
-	if err != nil {
-		return nil, err
-	}
-	return &article, nil
-}
-
 func (productsRepo *ProductsRepositoryImpl) UpdateproductArticles(ctx context.Context, productArticle *database.ProductsArticles) (int64, error) {
 	options := productsRepo.client.BuildOptions(false, productsRepo.client.GetIsolationLevel(1))
 	tx, err := productsRepo.client.BeginWithContext(ctx, &options)
@@ -330,6 +321,7 @@ func (productsRepo *ProductsRepositoryImpl) GetProductDetailsByID(ctx context.Co
 	return finalResult, nil
 }
 
+// Todo Move this to article repo
 func (productsRepo *ProductsRepositoryImpl) UpdateArticle(ctx context.Context, article *database.Article) (int64, error) {
 	options := productsRepo.client.BuildOptions(false, productsRepo.client.GetIsolationLevel(1))
 	tx, err := productsRepo.client.BeginWithContext(ctx, &options)
@@ -360,4 +352,15 @@ func (productsRepo *ProductsRepositoryImpl) UpdateArticle(ctx context.Context, a
 		return -1, err
 	}
 	return id, nil
+}
+
+// Todo Move this to article repo
+func (productsRepo *ProductsRepositoryImpl) GetArticleByID(ctx context.Context, query string, args ...interface{}) (*database.Article, error) {
+	result := productsRepo.client.QueryRowWithContext(ctx, query, args...)
+	article := database.Article{}
+	err := result.Scan(&article.ArtID, &article.Name, &article.AvilableStock, &article.SoldStock)
+	if err != nil {
+		return nil, err
+	}
+	return &article, nil
 }
