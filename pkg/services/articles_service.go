@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"github.com/velann21/warehouse-inventory-management/pkg/helpers"
-	sqlMigration"github.com/velann21/warehouse-inventory-management/pkg/migration_scripts"
+	sqlMigration "github.com/velann21/warehouse-inventory-management/pkg/migration_scripts"
 	"github.com/velann21/warehouse-inventory-management/pkg/models/database"
 	articlesModel "github.com/velann21/warehouse-inventory-management/pkg/models/internals"
 	"github.com/velann21/warehouse-inventory-management/pkg/models/requests"
@@ -21,7 +21,7 @@ type ArticlesService interface {
 	AddArticles(ctx context.Context, articles *requests.AddArticles) ([]articlesModel.SuccessfullyAddedArticle, []articlesModel.FailedArticle)
 	AddArticlesFromFile(ctx context.Context, decoder *json.Decoder, waitChannel chan bool) error
 	ListArticles(ctx context.Context) ([]*database.Article, error)
-	SqlMigration(ctx context.Context, req *requests.SqlMigrationRequest)error
+	SqlMigration(ctx context.Context, req *requests.SqlMigrationRequest) error
 }
 
 type ArticlesServiceImpl struct {
@@ -162,16 +162,15 @@ func (articlesService *ArticlesServiceImpl) ListArticles(ctx context.Context) ([
 	return articles, nil
 }
 
-
-func (articlesService *ArticlesServiceImpl) SqlMigration(ctx context.Context, req *requests.SqlMigrationRequest)error{
-	if req.Upcount > 0{
+func (articlesService *ArticlesServiceImpl) SqlMigration(ctx context.Context, req *requests.SqlMigrationRequest) error {
+	if req.Upcount > 0 {
 		err := sqlMigration.MigrateDb(uint(req.Upcount))
-		if err != nil{
+		if err != nil {
 			return err
 		}
-	}else if req.Downcount < 0{
+	} else if req.Downcount < 0 {
 		err := sqlMigration.MigrateDb(uint(req.Downcount))
-		if err != nil{
+		if err != nil {
 			return err
 		}
 	}

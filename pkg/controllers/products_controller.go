@@ -11,6 +11,9 @@ import (
 	"net/http"
 )
 
+//1. Todo make the response structure into Hateos style
+//2. Todo Update the sold_stock count in articles table once the product purchase occures
+//3. Todo Fix the bug related to update the availble_stock in aticle table when the new products are added
 type ProductsControllers struct {
 	service services.ProductsService
 	helper  helpers.HelperBase
@@ -60,7 +63,7 @@ func (productsControllers *ProductsControllers) AddProductsFromFile(res http.Res
 	}
 	err = products.ValidateAddProductsDataFromFile(req, handler)
 	if err != nil {
-		logrus.WithError(err).Error("Something went wrong while ValidateAddArticles() ")
+		logrus.WithError(err).Error("Something went wrong while ValidateAddProductsDataFromFile() ")
 		errorResponse.HandleError(err, res)
 		return
 	}
@@ -80,7 +83,7 @@ func (productsControllers *ProductsControllers) AddProductsFromFile(res http.Res
 }
 
 func (productsControllers *ProductsControllers) ListProducts(res http.ResponseWriter, req *http.Request) {
-	logrus.Info("Starting the GetAllProducts().......")
+	logrus.Info("Starting the ListProducts().......")
 	ctx, cancel := context.WithTimeout(req.Context(), TIMEOUT)
 	defer cancel()
 	successResponse := response.NewSuccessResponse()
@@ -99,7 +102,7 @@ func (productsControllers *ProductsControllers) ListProducts(res http.ResponseWr
 }
 
 func (productsControllers *ProductsControllers) PurchaseProducts(res http.ResponseWriter, req *http.Request) {
-	logrus.Info("Starting the BuyProducts().......")
+	logrus.Info("Starting the PurchaseProducts().......")
 	ctx, cancel := context.WithTimeout(req.Context(), TIMEOUT)
 	defer cancel()
 	purchseProducts := requests.NewPurchaseProducts()
@@ -150,7 +153,7 @@ func (productsControllers *ProductsControllers) GetProductDetails(res http.Respo
 	}
 
 	productDetail, err := productsControllers.service.GetProductByID(ctx, getProductDetails)
-	if err != nil{
+	if err != nil {
 		logrus.WithError(err).Error("Something went wrong while GetProductByID()")
 		errorResponse.HandleError(err, res)
 		return

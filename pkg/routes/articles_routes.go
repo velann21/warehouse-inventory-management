@@ -15,10 +15,10 @@ type ArticlesRoutes struct {
 }
 
 func NewArticlesRoutes(sql *sql.DB, helpers helpers.HelperBase) *ArticlesRoutes {
+	// Initializing all the dependent object for Articles at one place
 	sqlClient := databases.NewSqlClient(sql)
 	inventoryRepository := repository.NewArticlesRepositoryFactory(repository.ARTICLES_REPO_VERSION1, sqlClient)
 	inventoryService := services.NewInventoryServiceFactory(services.ARTICLES_SERVICE_VERSION1, inventoryRepository)
-
 	return &ArticlesRoutes{controller: controllers.NewArticlesController(inventoryService, helpers)}
 }
 
@@ -26,5 +26,7 @@ func (inventory *ArticlesRoutes) ArticlesRoutes(route *mux.Router) {
 	route.PathPrefix("/v1/inventory/articles/fromFile").HandlerFunc(inventory.controller.AddArticlesFromFile).Methods("POST")
 	route.PathPrefix("/v1/inventory/articles").HandlerFunc(inventory.controller.AddArticles).Methods("POST")
 	route.PathPrefix("/v1/inventory/articles").HandlerFunc(inventory.controller.ListArticles).Methods("GET")
+
+	// Todo Move this to common routes folders later
 	route.PathPrefix("/v1/inventory/sqlmigration").HandlerFunc(inventory.controller.SqlMigration).Methods("POST")
 }

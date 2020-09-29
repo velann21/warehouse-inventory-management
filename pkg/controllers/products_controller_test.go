@@ -15,6 +15,7 @@ import (
 )
 
 type MockProductService struct {
+	SrvType string 
 }
 
 func (productsService *MockProductService) AddProducts(ctx context.Context, products *requests.AddProducts) {
@@ -37,16 +38,32 @@ func (productsService *MockProductService) DeleteByID(ctx context.Context, produ
 }
 
 func (productsService *MockProductService) GetProductByID(ctx context.Context, productDetails *requests.GetProductDetails) ([]*database.ProductDetails, error) {
-    fmt.Println("Mock details")
-	details := []*database.ProductDetails{}
-	return details, nil
+	if productsService.SrvType == ""{
+		fmt.Println("Mock details")
+		details := []*database.ProductDetails{}
+		return details, nil
+	}else if productsService.SrvType == "200Response" {
+		details := []*database.ProductDetails{
+			&database.ProductDetails{
+			QuantityEach:1,
+			ArtID:10,
+			Name:"legs",
+			},
+			&database.ProductDetails{
+				QuantityEach:20,
+				ArtID:11,
+				Name:"Bolts",
+			},
+		}
+		return details, nil
+	}
+	return nil, nil
 }
 
 func (productsService *MockProductService) GetAllProducts(ctx context.Context) ([]*database.Product, error) {
 
 	return nil, nil
 }
-
 
 func Router(prodService services.ProductsService) *mux.Router {
 	router := mux.NewRouter()
@@ -86,10 +103,16 @@ func TestProductsControllers_AddProducts(t *testing.T) {
 	fmt.Println(response.Body)
 }
 
-
-func TestProductsControllers_GetProductDetails(t *testing.T) {
+func TestProductsControllers_GetProductDetailsWithEmptyResponse(t *testing.T) {
 	request, _ := http.NewRequest(http.MethodPost, "/v1/inventory/products/15", nil)
 	response := httptest.NewRecorder()
 	Router(&MockProductService{}).ServeHTTP(response, request)
+	fmt.Println(response.Body)
+}
+
+func TestProductsControllers_GetProductDetailsWith200Response(t *testing.T) {
+	request, _ := http.NewRequest(http.MethodPost, "/v1/inventory/products/15", nil)
+	response := httptest.NewRecorder()
+	Router(&MockProductService{SrvType:"200Response"}).ServeHTTP(response, request)
 	fmt.Println(response.Body)
 }

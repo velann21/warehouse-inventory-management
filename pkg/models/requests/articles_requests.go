@@ -68,8 +68,8 @@ func (addArticles *AddArticles) ValidateAddArticlesDataFromFile(req *http.Reques
 }
 
 type SqlMigrationRequest struct {
-	Upcount              int64    `json:"upcount,omitempty"`
-	Downcount            int64    `json:"downcount,omitempty"`
+	Upcount   int64 `json:"upcount,omitempty"`
+	Downcount int64 `json:"downcount,omitempty"`
 }
 
 func (sqlMigrationRequest *SqlMigrationRequest) PopulateSqlMigrationRequest(body io.Reader) error {
@@ -81,13 +81,13 @@ func (sqlMigrationRequest *SqlMigrationRequest) PopulateSqlMigrationRequest(body
 	return nil
 }
 
-func (sqlMigrationRequest *SqlMigrationRequest) ValidateSqlMigrationRequest() error{
+func (sqlMigrationRequest *SqlMigrationRequest) ValidateSqlMigrationRequest() error {
 
-	if sqlMigrationRequest.Upcount < 0 && sqlMigrationRequest.Downcount < 0{
+	if sqlMigrationRequest.Upcount < 0 && sqlMigrationRequest.Downcount < 0 {
 		return helpers.InvalidRequest
 	}
 
-	if sqlMigrationRequest.Upcount > 0 && sqlMigrationRequest.Downcount > 0{
+	if sqlMigrationRequest.Upcount > 0 && sqlMigrationRequest.Downcount > 0 {
 		return helpers.InvalidRequest
 	}
 

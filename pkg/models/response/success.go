@@ -51,7 +51,7 @@ func (resp *SuccessResponse) GetArticlesResponse(articles []*database.Article) {
 	metaData["message"] = "Success"
 }
 
-func (resp *SuccessResponse) GetProductDetailsResponse(productDetails []*database.ProductDetails){
+func (resp *SuccessResponse) GetProductDetailsResponse(productDetails []*database.ProductDetails) {
 	responseData := make([]map[string]interface{}, 0)
 	data := make(map[string]interface{})
 	data["product_details"] = productDetails

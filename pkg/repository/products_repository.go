@@ -321,7 +321,7 @@ func (productsRepo *ProductsRepositoryImpl) GetProductDetailsByID(ctx context.Co
 	finalResult := []*database.ProductDetails{}
 	for results.Next() {
 		product := database.ProductDetails{}
-		err := results.Scan( &product.QuantityEach, &product.ArtID, &product.Name)
+		err := results.Scan(&product.QuantityEach, &product.ArtID, &product.Name)
 		if err != nil {
 			return nil, err
 		}

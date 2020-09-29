@@ -15,6 +15,7 @@ type ProductsRoutes struct {
 }
 
 func NewProductsRoutes(sql *sql.DB, helpers helpers.HelperBase) *ProductsRoutes {
+	// Initializing all the dependent object for Products at one place
 	sqlClient := databases.NewSqlClient(sql)
 	inventoryRepository := repository.NewProductsRepositoryFactory(repository.PRODUCTS_REPO_VERSION1, sqlClient)
 	productsService := services.NewProductsServiceFactory(services.PRODUCTS_SERVICE_VERSION1, inventoryRepository)
@@ -26,5 +27,5 @@ func (productRoutes *ProductsRoutes) ProductRoutes(route *mux.Router) {
 	route.PathPrefix("/v1/inventory/products").HandlerFunc(productRoutes.controller.AddProducts).Methods("POST")
 	route.PathPrefix("/v1/inventory/products/{id}").HandlerFunc(productRoutes.controller.GetProductDetails).Methods("GET")
 	route.PathPrefix("/v1/inventory/products").HandlerFunc(productRoutes.controller.ListProducts).Methods("GET")
-	route.PathPrefix("/v1/inventory/purchaseProducts").HandlerFunc(productRoutes.controller.PurchaseProducts).Methods("POST")
+	route.PathPrefix("/v1/inventory/products/purchase").HandlerFunc(productRoutes.controller.PurchaseProducts).Methods("POST")
 }

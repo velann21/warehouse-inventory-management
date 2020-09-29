@@ -13,6 +13,8 @@ import (
 
 const TIMEOUT = time.Minute * 50
 
+//1. Todo make the response structure into Hateos style
+//2. Todo change the database table name from inventory to articles
 type ArticlesControllers struct {
 	service services.ArticlesService
 	helper  helpers.HelperBase
@@ -63,7 +65,7 @@ func (productsControllers *ArticlesControllers) AddArticlesFromFile(res http.Res
 	}
 	err = articles.ValidateAddArticlesDataFromFile(req, handler)
 	if err != nil {
-		logrus.WithError(err).Error("Something went wrong while ValidateAddArticles() ")
+		logrus.WithError(err).Error("Something went wrong while ValidateAddArticlesDataFromFile() ")
 		errorResponse.HandleError(err, res)
 		return
 	}
@@ -95,10 +97,12 @@ func (productsControllers *ArticlesControllers) ListArticles(res http.ResponseWr
 	}
 	successResponse.GetArticlesResponse(articleList)
 	successResponse.SuccessResponse(res, http.StatusOK)
+	logrus.Info("Done ListArticles().")
 	return
 }
 
-func (productsControllers *ArticlesControllers) SqlMigration(res http.ResponseWriter, req *http.Request){
+func (productsControllers *ArticlesControllers) SqlMigration(res http.ResponseWriter, req *http.Request) {
+	logrus.Info("Starting the SqlMigration().......")
 	ctx, cancel := context.WithTimeout(req.Context(), TIMEOUT)
 	defer cancel()
 	successResponse := response.NewSuccessResponse()
@@ -113,17 +117,18 @@ func (productsControllers *ArticlesControllers) SqlMigration(res http.ResponseWr
 	}
 	err = sqlMigrationReq.ValidateSqlMigrationRequest()
 	if err != nil {
-		logrus.WithError(err).Error("Something went wrong while PopulateSqlMigrationRequest() ")
+		logrus.WithError(err).Error("Something went wrong while ValidateSqlMigrationRequest() ")
 		errorResponse.HandleError(err, res)
 		return
 	}
 
 	err = productsControllers.service.SqlMigration(ctx, &sqlMigrationReq)
-	if err != nil{
+	if err != nil {
 		logrus.WithError(err).Error("Something went wrong while SqlMigration() ")
 		errorResponse.HandleError(err, res)
 		return
 	}
 	successResponse.SuccessResponse(res, http.StatusOK)
+	logrus.Info("Starting the SqlMigration().......")
 	return
 }

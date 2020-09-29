@@ -20,7 +20,7 @@ type ProductsService interface {
 	AddProducts(ctx context.Context, products *requests.AddProducts)
 	AddProductsFromFile(ctx context.Context, decoder *json.Decoder, waitChannel chan bool) error
 	GetAllProducts(ctx context.Context) ([]*database.Product, error)
-	GetProductByID(ctx context.Context, productDetails *requests.GetProductDetails)([]*database.ProductDetails, error)
+	GetProductByID(ctx context.Context, productDetails *requests.GetProductDetails) ([]*database.ProductDetails, error)
 	PurchaseProducts(ctx context.Context, products *requests.PurchaseProduct) error
 }
 
@@ -86,10 +86,10 @@ func (productsService *ProductsServiceImpl) DeleteByID(ctx context.Context, prod
 	return productsService.repo.DeleteByID(ctx, productID)
 }
 
-func (productsService *ProductsServiceImpl) GetProductByID(ctx context.Context, productDetails *requests.GetProductDetails)([]*database.ProductDetails, error){
+func (productsService *ProductsServiceImpl) GetProductByID(ctx context.Context, productDetails *requests.GetProductDetails) ([]*database.ProductDetails, error) {
 	productID, _ := strconv.Atoi(productDetails.ID)
 	productDetail, err := productsService.repo.GetProductDetailsByID(ctx, productID)
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 	return productDetail, nil
@@ -218,7 +218,7 @@ func (productsService *ProductsServiceImpl) addProductJob(ctx context.Context, p
 
 			dbarticle.AvilableStock -= amount
 			_, err = productsService.repo.UpdateArticle(ctx, dbarticle)
-			if err != nil{
+			if err != nil {
 				//Todo roll back all Product count and Product_inventory entry
 				return -1, err
 			}
@@ -248,7 +248,7 @@ func (productsService *ProductsServiceImpl) addProductArticlesJob(ctx context.Co
 		article.AvilableStock -= amountInInt
 
 		_, err = productsService.repo.UpdateArticle(ctx, article)
-		if err != nil{
+		if err != nil {
 			//Todo roll back all Product count and Product_inventory entry
 			return err
 		}

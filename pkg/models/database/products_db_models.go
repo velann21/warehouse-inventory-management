@@ -68,7 +68,7 @@ func (productArticles *ProductsArticles) GetTotalRequiredQuantity() int {
 }
 
 type ProductDetails struct {
-	QuantityEach  int    `json:"quantity_each"`
-	ArtID         int    `json:"art_id"`
-	Name          string `json:"name"`
+	QuantityEach int    `json:"quantity_each"`
+	ArtID        int    `json:"art_id"`
+	Name         string `json:"name"`
 }
