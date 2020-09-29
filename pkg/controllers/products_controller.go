@@ -14,6 +14,7 @@ import (
 //1. Todo make the response structure into Hateos style
 //2. Todo Update the sold_stock count in articles table once the product purchase occures
 //3. Todo Fix the bug related to update the availble_stock in aticle table when the new products are added
+//4. Todo Filter the products in GetProducts API when the products count is 0
 type ProductsControllers struct {
 	service services.ProductsService
 	helper  helpers.HelperBase

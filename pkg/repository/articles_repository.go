@@ -19,7 +19,8 @@ const (
 	LevelDefault           = 0
 )
 
-// Todo to reuse the code of transactions instead of doing it always
+//1. Todo to reuse the code of transactions instead of doing it always
+//2. TODO Make use of proper transaction isolation level based on type of transaction
 type ArticlesRepository interface {
 	InsertArticle(ctx context.Context, article *database.Article) (int64, error)
 	GetArticles(ctx context.Context) ([]*database.Article, error)

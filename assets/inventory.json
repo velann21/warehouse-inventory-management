@@ -1,0 +1,28 @@
+[
+    {
+      "art_id": "1",
+      "name": "screws",
+      "stock": "40"
+    },
+    {
+      "art_id": "2",
+      "name": "legs",
+      "stock": "10"
+    },
+    {
+      "art_id": "3",
+      "name": "covers",
+      "stock": "30"
+    },
+    {
+      "art_id": "4",
+      "name": "table top",
+      "stock": "1"
+    },
+    {
+      "art_id": "5",
+      "name": "seats",
+      "stock": "1"
+    }
+  ]
+

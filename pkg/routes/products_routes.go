@@ -23,9 +23,9 @@ func NewProductsRoutes(sql *sql.DB, helpers helpers.HelperBase) *ProductsRoutes 
 }
 
 func (productRoutes *ProductsRoutes) ProductRoutes(route *mux.Router) {
-	route.PathPrefix("/v1/inventory/products/fromFile").HandlerFunc(productRoutes.controller.AddProductsFromFile).Methods("POST")
-	route.PathPrefix("/v1/inventory/products").HandlerFunc(productRoutes.controller.AddProducts).Methods("POST")
-	route.PathPrefix("/v1/inventory/products/{id}").HandlerFunc(productRoutes.controller.GetProductDetails).Methods("GET")
-	route.PathPrefix("/v1/inventory/products").HandlerFunc(productRoutes.controller.ListProducts).Methods("GET")
-	route.PathPrefix("/v1/inventory/products/purchase").HandlerFunc(productRoutes.controller.PurchaseProducts).Methods("POST")
+	route.Path("/v1/inventory/products").HandlerFunc(productRoutes.controller.AddProducts).Methods("POST")
+	route.Path("/v1/inventory/products/fromFile").HandlerFunc(productRoutes.controller.AddProductsFromFile).Methods("POST")
+	route.Path("/v1/inventory/products/{id}").HandlerFunc(productRoutes.controller.GetProductDetails).Methods("GET")
+	route.Path("/v1/inventory/products").HandlerFunc(productRoutes.controller.ListProducts).Methods("GET")
+	route.Path("/v1/inventory/products/purchase").HandlerFunc(productRoutes.controller.PurchaseProducts).Methods("POST")
 }

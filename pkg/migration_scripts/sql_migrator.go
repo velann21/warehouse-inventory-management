@@ -10,7 +10,8 @@ import (
 
 func MigrateDb(stepCount uint) error {
 	helper := helpers.Helper{}
-	fsrc, err := (&file.File{}).Open("file://")
+	// Todo Get this location as env so that local and container environemnt can be configurable
+	fsrc, err := (&file.File{}).Open(helper.ReadEnv(helpers.MigrationFileLocation))
 	if err != nil {
 		return err
 	}
