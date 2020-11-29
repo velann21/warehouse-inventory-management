@@ -77,9 +77,15 @@ jobs:
 
       # Deploy to Docker registry
       - name: Deploy to Docker registry
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: singaravelan21/warehouse-inventory-mgmt:v1.0.0
-          tag_with_ref: true
+        env:
+          DOCKER_HUB: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_HUB_KEY: ${{ secrets.DOCKER_PASSWORD }}
+        run:
+          ls -l
+          echo 'Docker login'
+          docker login -u $DOCKER_HUB -p $DOCKER_HUB_KEY
+          echo 'Running docker build'
+          docker build . -t singaravelan21/warehouse-management:latest
+          echo 'Pushing image'
+          docker push singaravelan21/warehouse-management:latest
+          echo 'Done!'
