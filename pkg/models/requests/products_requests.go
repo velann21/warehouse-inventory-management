@@ -80,6 +80,7 @@ type PurchaseProduct struct {
 func NewPurchaseProducts() *PurchaseProduct {
 	return &PurchaseProduct{}
 }
+
 func (purchaseProduct *PurchaseProduct) PopulatePurchaseProducts(body io.Reader) error {
 	decode := json.NewDecoder(body)
 	err := decode.Decode(&purchaseProduct)
@@ -108,6 +109,7 @@ type GetProductDetails struct {
 func NewGetProductDetails() *GetProductDetails {
 	return &GetProductDetails{}
 }
+
 func (getProductDetails *GetProductDetails) PopulateGetProductDetails(ID string) error {
 	getProductDetails.ID = ID
 	return nil

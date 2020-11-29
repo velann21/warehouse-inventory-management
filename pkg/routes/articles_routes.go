@@ -28,5 +28,5 @@ func (inventory *ArticlesRoutes) ArticlesRoutes(route *mux.Router) {
 	route.Path("/v1/inventory/articles").HandlerFunc(inventory.controller.ListArticles).Methods("GET")
 
 	// Todo Move this to common routes folders later
-	route.PathPrefix("/v1/inventory/sqlmigration").HandlerFunc(inventory.controller.SqlMigration).Methods("POST")
+	route.Path("/v1/inventory/sqlmigration").HandlerFunc(inventory.controller.SqlMigration).Methods("POST")
 }
