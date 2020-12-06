@@ -1,10 +1,10 @@
 imagebase: singaravelan21/inventory_srv
-imageversion: v1.0.0
+imageversion: v1.1.0
 replicas: 1
-namespace: inventory_srv
+namespace: inventory-srv
 containers:
-  - name: inventory_srv
-    image: singaravelan21/singaravelan21/inventory_srv:v1.0.0
+  - name: inventory-srv
+    image: singaravelan21/inventory_srv:v1.1.0
 
 serviceports:
   - protocol: TCP
