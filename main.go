@@ -14,6 +14,7 @@ import (
 
 func main() {
 	//Helpers Object
+	logrus.Info("Started Main")
 	helper := helpers.NewHelper(helpers.HELPER_VERSION_V1)
 	helper.SetEnv()
 
