@@ -51,4 +51,5 @@ func main() {
 		log.Fatal(err)
 		return
 	}
+	logrus.Info("Something went wrong")
 }

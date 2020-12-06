@@ -1,4 +1,0 @@
-apiVersion: {{ template "service.nameSpace" .}}
-kind: Namespace
-metadata:
-  name: {{ .Values.namespace }}
