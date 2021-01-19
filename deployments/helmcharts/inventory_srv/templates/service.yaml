@@ -1,16 +1,15 @@
-apiVersion: {{ template "service.apiVersion" .}}
+apiVersion: v1
 kind: Service
 metadata:
-   name: {{ .Release.Name}}
-   namespace: {{ .Values.namespace }}
-   {{ template "inventorydeps.labels" }}
+  name: inventorysrv
+  labels:
+    app: inventorysrv
 spec:
-  type: ClusterIP
-  selector:
-    app: {{ .Release.Name}}
+  type: NodePort
   ports:
-    {{- range $key, $value := .Values.serviceports }}
-    - protocol: {{ $value.protocol }}
-      port: {{ $value.port }}
-      targetPort: {{ $value.targetPort }}
-    {{- end }}
+    - name: inventorysrv
+      port: 8083
+      targetPort: 8083
+      nodePort: 30007
+  selector:
+    app: inventorysrv

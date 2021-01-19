@@ -36,7 +36,7 @@ func (helper *Helper) SetEnv() {
 	//os.Setenv("MYSQL_CONN", "root:root@tcp(localhost:3308)/inventory?")
 	//os.Setenv("MIGRATIONFILE", "file://")
 
-	os.Setenv("MYSQL_CONN", "root:Siar@123@tcp(localhost:3306)/inventory?")
+	os.Setenv("MYSQL_CONN", "root:G4GowUq]er@m+og7EdisnIPEc#4@tcp(localhost:3306)/inventory?")
 	os.Setenv("MIGRATIONFILE", "file://pkg/migration_scripts")
 }
 

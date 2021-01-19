@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    {{ template "inventory_srv.fullname" . }}
+    labels:
+      app: mysql
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+      metadata:
+        labels:
+          app: mysql
+      spec:
+        containers:
+          - name: mysql
+            image: mysql/mysql-server
+            env:
+              - name: MYSQL_ROOT_PASSWORD
+                value: "Siar@123"
+            ports:
+              - containerPort: 3306
+            volumeMounts:
+              - name: mysqlconfig
+                mountPath: /etc/mysql/conf.d
+          - name: inventorysrv
+            image: singaravelan21/inventory_srv:v1.12.0
+            env:
+              - name: MYSQL_CONN
+                value: "root:@tcp(mysql:3306)/inventory?"
+              - name: MIGRATIONFILE
+                value: "file://"
+            ports:
+              - containerPort: 8083
+        volumes:
+          - name: mysqlconfig
+            configMap:
+              name: mysql
+
+
+

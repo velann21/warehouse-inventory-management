@@ -16,7 +16,7 @@ func main() {
 	//Helpers Object
 	logrus.Info("Started Main")
 	helper := helpers.NewHelper(helpers.HELPER_VERSION_V1)
-	helper.SetEnv()
+	//helper.SetEnv()
 
 	//Sql Connection Object, If failed to make sql conn restart container/app
 	sqlconn := db.NewSqlConnection()

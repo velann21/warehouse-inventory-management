@@ -1,4 +1,4 @@
-# Default values for inventory_srv.
+# Default values for mysql_singlerepli.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -77,3 +77,11 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+Name: defaultmysql
+ConfigFiles:
+  mysql.cnf: |-
+    [mysqld]
+    max_connections=250
+    default_authentication_plugin=mysql_native_password
+

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventorysrv
+  labels:
+    app: inventorysrv
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventorysrv
+  template:
+    metadata:
+      labels:
+        app: inventorysrv
+    spec:
+      containers:
+        - name: inventorysrv
+          image: singaravelan21/inventory_srv:v1.13.0
+          env:
+            - name: MYSQL_CONN
+              value: "root:root@tcp(mysql:3306)/inventory?"
+            - name: MIGRATIONFILE
+              value: "file://"
+          ports:
+              - containerPort: 8083
